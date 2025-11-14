@@ -14,18 +14,18 @@
     .checkout-form { flex: 2; }
     .checkout-summary { flex: 1; }
     .form-section { background: #fff; border: 1px solid #eee; padding: 20px; margin-bottom: 16px; border-radius: 6px; }
-    .form-section h3 { margin: 0 0 16px; font-size: 18px; border-bottom: 1px solid #f0f0f0; padding-bottom: 12px; }
+    .form-section h3 { margin: 0 0 16px; font-size: 18px; border-bottom: 1px solid #f0f0f0; padding-bottom: 12px; color: #000; }
     .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; color: #000; }
     .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
     .form-row { display: flex; gap: 12px; }
     .form-row .form-group { flex: 1; }
     .order-review { background: #f9f9f9; border: 1px solid #eee; padding: 16px; border-radius: 6px; margin-bottom: 16px; }
-    .review-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+    .review-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; color: #000; }
     .review-item:last-child { border-bottom: none; }
-    .review-total { display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; margin-top: 8px; padding-top: 8px; border-top: 2px solid #ddd; }
+    .review-total { display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; margin-top: 8px; padding-top: 8px; border-top: 2px solid #ddd; color: #000; }
     .summary-box { background: #fff; border: 1px solid #eee; padding: 16px; border-radius: 6px; }
-    .summary-box h3 { margin: 0 0 16px; font-size: 18px; }
+    .summary-box h3 { margin: 0 0 16px; font-size: 18px; color: #000; }
     .btn-place-order { display: block; width: 100%; background: var(--accent); color: #fff; padding: 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 600; }
     .btn-place-order:hover { background: #e55f00; }
     .payment-option { display:flex; align-items:center; gap:8px; margin-bottom:10px; cursor:pointer; padding:8px; border-radius:6px; color:#222 }
@@ -36,11 +36,6 @@
       .form-row { flex-direction: column; }
       .form-row .form-group { flex: 1; }
     }
-    /* CSS-only payment panels */
-    .payment-panels{margin-top:12px}
-    .payment-panel{display:none;background:#fff;border:1px solid #eee;padding:12px;border-radius:6px;margin-top:10px}
-    input[name="payment"][value="bank"]:checked ~ .payment-panels .bank-panel,
-    input[name="payment"][value="wallet"]:checked ~ .payment-panels .wallet-panel{display:block}
   </style>
 </head>
 <body>
@@ -57,7 +52,7 @@
       <h2>Checkout</h2>
     </div>
 
-    <form id="checkout-form" method="POST" action="https://formspree.io/f/xyzabnop" onsubmit="return handleCheckout(event)">
+    <form id="checkout-form" method="POST" onsubmit="return handleCheckout(event)">
       <div class="checkout-main">
         <div class="checkout-form">
           <!-- Delivery Address -->
@@ -100,7 +95,6 @@
           <!-- Payment Method -->
           <div class="form-section">
             <h3>Payment Method</h3>
-            <!-- Place radios as direct children so CSS sibling selector works -->
             <input type="radio" id="pay-cod" name="payment" value="cod" checked class="sr-only">
             <label class="payment-option" for="pay-cod">Cash on Delivery</label>
 
@@ -112,17 +106,6 @@
 
             <input type="radio" id="pay-wallet" name="payment" value="wallet" class="sr-only">
             <label class="payment-option" for="pay-wallet">Digital Wallet</label>
-
-            <!-- CSS-only panels shown when bank/wallet selected -->
-            <div class="payment-panels">
-                <div class="payment-panel bank-panel">
-                  <p style="margin:0;color:#666;font-size:14px">Please proceed with your bank transfer. Our team will verify your payment and confirm your order.</p>
-                </div>
-
-                <div class="payment-panel wallet-panel">
-                  <p style="margin:0;color:#666;font-size:14px">Please proceed with your digital wallet payment. Your order will be confirmed once payment is received.</p>
-                </div>
-              </div>
           </div>
 
           <!-- Order Review -->
@@ -170,7 +153,7 @@
 
     function renderOrderReview() {
       if (cart.length === 0) {
-        document.getElementById('order-review').innerHTML = '<p style="color:#d32f2f">Your cart is empty. <a href="index.html">Return to shop</a></p>';
+        document.getElementById('order-review').innerHTML = '<p style="color:#d32f2f"><strong>Your cart is empty!</strong><br><a href="index.html">Return to shop</a></p>';
         return;
       }
 
@@ -178,15 +161,15 @@
       let subtotal = 0;
 
       cart.forEach(item => {
-          const itemTotal = item.price * item.qty;
-          subtotal += itemTotal;
-          const thumb = item.img ? `<img src="${item.img}" alt="${item.title}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;margin-right:8px">` : '';
-          reviewHTML += `
-            <div class="review-item">
-              <span>${thumb}${item.title} x${item.qty}</span>
-              <span>Rs. ${itemTotal.toLocaleString()}</span>
-            </div>
-          `;
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+        const thumb = item.img ? `<img src="${item.img}" alt="${item.title}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;margin-right:8px">` : '';
+        reviewHTML += `
+          <div class="review-item">
+            <span>${thumb}${item.title} x${item.qty}</span>
+            <span>Rs. ${itemTotal.toLocaleString()}</span>
+          </div>
+        `;
       });
 
       reviewHTML += `
@@ -249,14 +232,7 @@
         timestamp: new Date().toLocaleString()
       };
 
-      // Add cart data to form as a hidden field
-      const cartField = document.createElement('input');
-      cartField.type = 'hidden';
-      cartField.name = 'order_details';
-      cartField.value = JSON.stringify(orderData);
-      document.getElementById('checkout-form').appendChild(cartField);
-
-      // Store order in localStorage (demo)
+      // Store order in localStorage
       let orders = JSON.parse(localStorage.getItem('orders')) || [];
       orders.push(orderData);
       localStorage.setItem('orders', JSON.stringify(orders));
@@ -264,17 +240,12 @@
       // Clear cart
       localStorage.removeItem('cart');
 
-      // Show success message before submitting
-      alert('Order placed successfully!\n\nOrder ID: ' + (orders.length) + '\n\nThank you for your purchase.');
-
-      // Submit form to Formspree (this may not redirect on GitHub Pages, so we also redirect manually)
-      document.getElementById('checkout-form').submit();
+      // Show success message
+      const orderId = orders.length;
+      alert('Order placed successfully!\n\nOrder ID: ' + orderId + '\n\nThank you for your purchase.\n\nWe will contact you soon at ' + orderData.email);
       
-      // Fallback redirect after a delay
-      setTimeout(() => {
-        window.location = 'index.html';
-      }, 2000);
-
+      // Redirect to home
+      window.location.href = 'index.html';
       return false;
     }
 

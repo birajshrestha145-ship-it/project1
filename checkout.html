@@ -46,7 +46,7 @@
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <div class="logo-area"><a href="index.html"><img src="assets/Logo.jpg" alt="Logo" class="logo"></a></div>
+      <div class="logo-area"><a href="index.html"><img src="assets/logo.jpg" alt="Logo" class="logo"></a></div>
       <div style="flex:1"></div>
       <div class="actions-area"><a href="cart.html">← Back to Cart</a></div>
     </div>
@@ -57,7 +57,7 @@
       <h2>Checkout</h2>
     </div>
 
-    <form id="checkout-form" method="POST" onsubmit="handleCheckout(event)">
+    <form id="checkout-form" method="POST" action="https://formspree.io/f/xyzabnop" onsubmit="return handleCheckout(event)">
       <div class="checkout-main">
         <div class="checkout-form">
           <!-- Delivery Address -->
@@ -150,7 +150,7 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-section">
-        <img src="assets/Logo.jpg" alt="Logo" class="footer-logo">
+        <img src="assets/logo.jpg" alt="Logo" class="footer-logo">
         <p>Founded with a simple mission—to bring the best products at the best prices right to your doorstep—we work every day to create a smooth, secure, and enjoyable shopping experience.</p>
       </div>
       <div class="footer-section">
@@ -244,6 +244,13 @@
         timestamp: new Date().toLocaleString()
       };
 
+      // Add cart data to form as a hidden field
+      const cartField = document.createElement('input');
+      cartField.type = 'hidden';
+      cartField.name = 'order_details';
+      cartField.value = JSON.stringify(orderData);
+      document.getElementById('checkout-form').appendChild(cartField);
+
       // Store order in localStorage (demo)
       let orders = JSON.parse(localStorage.getItem('orders')) || [];
       orders.push(orderData);
@@ -252,8 +259,8 @@
       // Clear cart
       localStorage.removeItem('cart');
 
-      alert('Order placed successfully!\n\nOrder ID: ' + (orders.length) + '\nThank you for your purchase.');
-      window.location = 'index.html';
+      // Submit form to Formspree
+      document.getElementById('checkout-form').submit();
     }
 
     renderOrderReview();
@@ -261,4 +268,3 @@
   </script>
 </body>
 </html>
-

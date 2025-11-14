@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contact</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .page-hero{max-width:1200px;margin:36px auto;padding:20px;color:#000}
+    .card{background:#fff;padding:18px;border-radius:6px;color:#000}
+    .contact-form input, .contact-form textarea{width:100%;padding:8px;border:1px solid #ddd;border-radius:4px;margin-bottom:8px;font-family:inherit}
+    .contact-details{margin:20px 0;padding:15px;background:#f9f9f9;border-radius:6px}
+    .contact-details p{margin:10px 0;font-size:16px}
+    .contact-details strong{color:var(--accent)}
+    .send-btn{background:var(--accent);color:#fff;padding:10px 14px;border:none;border-radius:4px;cursor:pointer;font-size:16px;font-weight:600}
+    .send-btn:hover{opacity:0.9}
+    .form-message{margin-top:12px;padding:12px;border-radius:4px;display:none}
+    .form-message.success{background:#d4edda;color:#155724;border:1px solid #c3e6cb;display:block}
+    .form-message.error{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;display:block}
+  </style>
+</head>
+<body>
+  <script>
+    function handleContactForm(event) {
+      event.preventDefault();
+      
+      const fullName = document.getElementById('contact-name').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
+      const message = document.getElementById('contact-message').value.trim();
+      const messageDiv = document.getElementById('contact-message-div');
+      
+      // Validate form
+      if (!fullName || !email || !message) {
+        messageDiv.textContent = 'Please fill in all fields.';
+        messageDiv.className = 'form-message error';
+        return false;
+      }
+      
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        messageDiv.textContent = 'Please enter a valid email address.';
+        messageDiv.className = 'form-message error';
+        return false;
+      }
+      
+      // Simulate sending (in real app, this would go to a server)
+      messageDiv.textContent = 'Thank you! Your message has been sent successfully. We will get back to you soon.';
+      messageDiv.className = 'form-message success';
+      
+      // Reset form
+      document.getElementById('contact-form').reset();
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        messageDiv.className = 'form-message';
+      }, 5000);
+      
+      return false;
+    }
+  </script>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo-area"><a href="index.html"><img src="assets/logo.jpg" alt="Logo" class="logo"></a></div>
+      <div style="flex:1"></div>
+      <div class="actions-area"><a href="cart.html">Cart</a></div>
+    </div>
+  </header>
+
+  <main class="page-hero">
+    <div class="card contact-form">
+      <h2>Contact Us</h2>
+      <p>If you have questions, please fill out the form below or contact us directly.</p>
+      
+      <div class="contact-details">
+        <p><strong>Phone:</strong> 9800000000</p>
+        <p><strong>Email:</strong> a-zeroshooping@gmail.com</p>
+      </div>
+
+      <h3>Send us a Message</h3>
+      <form id="contact-form" onsubmit="return handleContactForm(event)">
+        <input type="text" id="contact-name" placeholder="Full name" required>
+        <input type="email" id="contact-email" placeholder="Email" required>
+        <textarea rows="5" id="contact-message" placeholder="Message" required></textarea>
+        <button type="submit" class="send-btn">Send Message</button>
+      </form>
+      <div id="contact-message-div" class="form-message"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-section">
+        <img src="assets/logo.jpg" alt="Logo" class="footer-logo">
+        <p>Founded with a simple mission—to bring the best products at the best prices right to your doorstep—we work every day to create a smooth, secure, and enjoyable shopping experience.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="service.html">Services</a></li>
+          <li><a href="aboutus.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

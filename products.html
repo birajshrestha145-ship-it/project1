@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Products</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .products-container { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
+    .category-title { font-size: 24px; color: #fff; margin-bottom: 20px; }
+    .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    
+    /* Product detail styles */
+    .product-page { max-width: 900px; margin: 30px auto; padding: 20px; background:#fff; border-radius:6px }
+    .product-image-large { width:100%; max-height:420px; object-fit:contain; background:#f4f4f4; border-radius:6px }
+    .product-title { font-size:22px; margin:14px 0 }
+    .product-price { color:var(--accent); font-weight:700; font-size:20px; margin-bottom:12px }
+    .product-desc { color:#555; line-height:1.6 }
+    .btn-add { display:inline-block;background:var(--accent);color:#fff;padding:10px 16px;border-radius:6px;text-decoration:none;margin-top:12px;cursor:pointer;border:none }
+    .back-link{display:inline-block;margin-top:12px;color:#333}
+    
+    @media (max-width: 1000px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .products-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo-area">
+        <a href="index.html"><img src="assets/logo.jpg" alt="Logo" class="logo"></a>
+      </div>
+      <div class="header-category">
+        <select id="cat-select" class="cat-select">
+          <option value="all">All</option>
+          <option value="electronics">Electronics</option>
+          <option value="fashion">Fashion</option>
+          <option value="cosmetics">Cosmetics</option>
+        </select>
+      </div>
+      <div class="search-area">
+        <form class="search-form" action="#" method="get">
+          <input class="search-input" type="text" placeholder="Search for products, brands and more" />
+          <button class="search-btn" type="submit">Search</button>
+        </form>
+      </div>
+      <div class="actions-area">
+        <a href="cart.html" class="action cart-link">Cart</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Catalog View -->
+  <div id="catalog-view" class="products-container" style="display: block;">
+    <h2 class="category-title" id="page-title">All Products</h2>
+    <div class="products-grid" id="products-grid"></div>
+  </div>
+
+  <!-- Product Detail View -->
+  <main id="detail-view" class="product-page" style="display: none;">
+    <img id="prod-img" class="product-image-large" src="" alt="">
+    <h1 id="prod-title" class="product-title"></h1>
+    <div id="prod-price" class="product-price"></div>
+    <div id="prod-desc" class="product-desc"></div>
+    <button id="addCartBtn" class="btn-add">Add to Cart</button>
+    <div><a class="back-link" href="products.html">← Back to Products</a></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-section">
+        <img src="assets/logo.jpg" alt="Logo" class="footer-logo">
+        <p>Founded with a simple mission—to bring the best products at the best prices right to your doorstep—we work every day to create a smooth, secure, and enjoyable shopping experience.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="service.html">Services</a></li>
+          <li><a href="aboutus.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const allProductsData = {
+      '1': {id:1, title: 'Sunday Running Club Oversized Hoodie', price:2500, img:'assets/hoodie.jpg', desc: 'Comfortable oversized hoodie, Sunday Running Club branded.', category: 'fashion'},
+      '2': {id:2, title: 'Premium Cotton Linen Casual Formal Pants for Men in Nepal', price:6000, img:'assets/pant.jpg', desc: 'Premium cotton-linen blend trousers for smart casual and formal wear.', category: 'fashion'},
+      '3': {id:3, title: 'Wireless Controller for PlayStation 4 & PC (Black)', price:2100, img:'assets/controller.jpg', desc: 'High-response wireless controller compatible with PS4 and PC.', category: 'electronics'},
+      '4': {id:4, title: 'Vr box With Adjustable Cardboard For 4-6 Inches Smartphones', price:3000, img:'assets/VR.jpg', desc: 'Adjustable VR box for 4-6 inch smartphones.', category: 'electronics'},
+      '5': {id:5, title: 'MARS Lip Mist for Women', price:1000, img:'assets/Lipstick.jpg', desc: 'Dual function lip mist with buildable, glossy, long-lasting color.', category: 'cosmetics'},
+      '6': {id:6, title: 'VESTEL 32" Normal LED TV | 3 Years Warranty', price:25000, img:'assets/Desktop.jpg', desc: '32 inch LED TV with IPS panel, HDR and Dolby sound.', category: 'electronics'},
+      '101': {id:101, title: 'Black Streetwear Half Pant', price:1200, img:'assets/Halfpant.jpg', desc: 'Stylish half pants perfect for summer.', category: 'fashion'},
+      '102': {id:102, title: 'Sky Blue Comfort Hoodie', price:2500, img:'assets/Hoodie1.jpg', desc: 'Premium quality hoodie with comfortable fit.', category: 'fashion'},
+      '103': {id:103, title: 'Classic Black Hoodie', price:2700, img:'assets/Hoodie2.jpg', desc: 'Stylish hoodie with modern design.', category: 'fashion'},
+      '104': {id:104, title: 'Cream Beige Urban Hoodie', price:2900, img:'assets/Hoodie3.jpg', desc: 'Premium comfort hoodie with excellent fabric.', category: 'fashion'},
+      '105': {id:105, title: 'Black Oversize Sweatshirt', price:2200, img:'assets/Sweatshirt.jpg', desc: 'Casual sweatshirt perfect for everyday wear.', category: 'fashion'},
+      '106': {id:106, title: 'Pure White Essential Pant', price:1500, img:'assets/Pant1.jpg', desc: 'Comfortable casual pants with modern cut.', category: 'fashion'},
+      '201': {id:201, title: 'Mypower Fast charging Powerbank | 20000mah Powerbank | Pd Fast Charging Power bank | Digital Display Powerbank | M205 PD QC 3.0 Power Bank', price:1800, img:'assets/Powerbank.jpg', desc: 'High capacity power bank with fast charging.', category: 'electronics'},
+      '202': {id:202, title: '25W I-phone Charger USB-C To Lightening Cable+Power Adapter For X-14 pro max', price:800, img:'assets/Charger.jpg', desc: 'Universal charger compatible with all devices.', category: 'electronics'},
+      '203': {id:203, title: 'Playstation DualSense Wireless Controller For PS5', price:10000, img:'assets/Controller1.jpg', desc: 'Wireless gaming controller with long battery life.', category: 'electronics'},
+      '204': {id:204, title: 'Vintage T9 Rechargeable Electric Hair Trimmer plastic body for men', price:2500, img:'assets/Trimmer.jpg', desc: 'Professional trimmer with precision blades.', category: 'electronics'},
+      '301': {id:301, title: 'MARS Candylicious Sheer Lip Gloss for Women | Hydrating & High Shine | Lightweight | Non-Sticky | Enriched with Vitamin-E, Hyaluronic Acid & Avocado Ester (4.0ml)', price:850, img:'assets/Lipstick1.jpg', desc: 'Long-lasting lipstick with vibrant colors.', category: 'cosmetics'},
+      '302': {id:302, title: 'Technic Invite Only Pressed Pigment Eyeshadow Palette', price:950, img:'assets/highlightercosmetics.jpg', desc: 'Premium highlighter and cosmetics in one.', category: 'cosmetics'}
+    };
+
+    const products = {
+      fashion: Object.values(allProductsData).filter(p => p.category === 'fashion'),
+      electronics: Object.values(allProductsData).filter(p => p.category === 'electronics'),
+      cosmetics: Object.values(allProductsData).filter(p => p.category === 'cosmetics')
+    };
+
+    const allProducts = Object.values(allProductsData);
+
+    // Check if viewing product detail
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('id');
+
+    if (productId && allProductsData[productId]) {
+      // Show detail view
+      showProductDetail(productId);
+    } else {
+      // Show catalog view
+      renderCatalog('all');
+    }
+
+    function showProductDetail(id) {
+      const p = allProductsData[id];
+      if (!p) return;
+
+      document.getElementById('catalog-view').style.display = 'none';
+      document.getElementById('detail-view').style.display = 'block';
+
+      document.getElementById('prod-img').src = p.img;
+      document.getElementById('prod-img').alt = p.title;
+      document.getElementById('prod-title').textContent = p.title;
+      document.getElementById('prod-price').textContent = 'Rs. ' + p.price.toLocaleString();
+      document.getElementById('prod-desc').textContent = p.desc;
+      document.getElementById('cat-select').style.display = 'none';
+
+      document.getElementById('addCartBtn').href = `#`;
+      document.getElementById('addCartBtn').onclick = function(e) {
+        e.preventDefault();
+        addToCart(id, p.title, p.price, p.img);
+      };
+    }
+
+    function renderCatalog(category) {
+      const grid = document.getElementById('products-grid');
+      const title = document.getElementById('page-title');
+      let toDisplay = allProducts;
+
+      if (category !== 'all') {
+        toDisplay = products[category] || [];
+        const categoryNames = { electronics: 'Electronics', fashion: 'Fashion', cosmetics: 'Cosmetics' };
+        title.textContent = categoryNames[category] || 'Products';
+      } else {
+        title.textContent = 'All Products';
+      }
+
+      grid.innerHTML = '';
+      toDisplay.forEach(p => {
+        grid.innerHTML += `
+          <a class="product-card" href="products.html?id=${p.id}">
+            <div class="product-image"><img src="${p.img}" alt="${p.title}"></div>
+            <div class="product-info">
+              <h4 class="title">${p.title}</h4>
+              <div class="price">Rs. ${p.price.toLocaleString()}</div>
+            </div>
+          </a>
+        `;
+      });
+    }
+
+    function addToCart(id, title, price, img) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const existing = cart.find(item => item.id === id.toString());
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ id: id.toString(), title: title, price: parseInt(price), qty: 1, img: img });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Added to cart!');
+    }
+
+    const select = document.getElementById('cat-select');
+    if (select) {
+      select.addEventListener('change', (e) => {
+        renderCatalog(e.target.value);
+      });
+    }
+  </script>
+</body>
+</html>

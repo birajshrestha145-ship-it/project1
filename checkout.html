@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Checkout</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { display: flex; flex-direction: column; }
+    .checkout-container { flex: 1; max-width: 1200px; margin: 0 auto; padding: 20px 16px; width: 100%; }
+    .checkout-header { margin-bottom: 24px; }
+    .checkout-header h2 { margin: 0; font-size: 24px; color: #fff; }
+    .checkout-main { display: flex; gap: 20px; }
+    .checkout-form { flex: 2; }
+    .checkout-summary { flex: 1; }
+    .form-section { background: #fff; border: 1px solid #eee; padding: 20px; margin-bottom: 16px; border-radius: 6px; }
+    .form-section h3 { margin: 0 0 16px; font-size: 18px; border-bottom: 1px solid #f0f0f0; padding-bottom: 12px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+    .form-row { display: flex; gap: 12px; }
+    .form-row .form-group { flex: 1; }
+    .order-review { background: #f9f9f9; border: 1px solid #eee; padding: 16px; border-radius: 6px; margin-bottom: 16px; }
+    .review-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+    .review-item:last-child { border-bottom: none; }
+    .review-total { display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; margin-top: 8px; padding-top: 8px; border-top: 2px solid #ddd; }
+    .summary-box { background: #fff; border: 1px solid #eee; padding: 16px; border-radius: 6px; }
+    .summary-box h3 { margin: 0 0 16px; font-size: 18px; }
+    .btn-place-order { display: block; width: 100%; background: var(--accent); color: #fff; padding: 14px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 600; }
+    .btn-place-order:hover { background: #e55f00; }
+    .payment-option { display:flex; align-items:center; gap:8px; margin-bottom:10px; cursor:pointer; padding:8px; border-radius:6px; color:#222 }
+    .payment-option:hover{background:#fafafa}
+    .sr-only{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+    @media (max-width: 768px) {
+      .checkout-main { flex-direction: column; }
+      .form-row { flex-direction: column; }
+      .form-row .form-group { flex: 1; }
+    }
+    /* CSS-only payment panels */
+    .payment-panels{margin-top:12px}
+    .payment-panel{display:none;background:#fff;border:1px solid #eee;padding:12px;border-radius:6px;margin-top:10px}
+    input[name="payment"][value="bank"]:checked ~ .payment-panels .bank-panel,
+    input[name="payment"][value="wallet"]:checked ~ .payment-panels .wallet-panel{display:block}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo-area"><a href="index.html"><img src="assets/logo.jpg" alt="Logo" class="logo"></a></div>
+      <div style="flex:1"></div>
+      <div class="actions-area"><a href="cart.html">← Back to Cart</a></div>
+    </div>
+  </header>
+
+  <div class="checkout-container">
+    <div class="checkout-header">
+      <h2>Checkout</h2>
+    </div>
+
+    <form id="checkout-form" method="POST" onsubmit="handleCheckout(event)">
+      <div class="checkout-main">
+        <div class="checkout-form">
+          <!-- Delivery Address -->
+          <div class="form-section">
+            <h3>Delivery Address</h3>
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" name="fullname" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Email *</label>
+                <input type="email" name="email" required>
+              </div>
+              <div class="form-group">
+                <label>Phone *</label>
+                <input type="tel" name="phone" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Address Line 1 *</label>
+              <input type="text" name="address1" required>
+            </div>
+            <div class="form-group">
+              <label>Address Line 2</label>
+              <input type="text" name="address2">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>City *</label>
+                <input type="text" name="city" required>
+              </div>
+              <div class="form-group">
+                <label>Postal Code</label>
+                <input type="text" name="postal">
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="form-section">
+            <h3>Payment Method</h3>
+            <!-- Place radios as direct children so CSS sibling selector works -->
+            <input type="radio" id="pay-cod" name="payment" value="cod" checked class="sr-only">
+            <label class="payment-option" for="pay-cod">Cash on Delivery</label>
+
+            <input type="radio" id="pay-card" name="payment" value="card" class="sr-only">
+            <label class="payment-option" for="pay-card">Credit / Debit Card</label>
+
+            <input type="radio" id="pay-bank" name="payment" value="bank" class="sr-only">
+            <label class="payment-option" for="pay-bank">Bank Transfer</label>
+
+            <input type="radio" id="pay-wallet" name="payment" value="wallet" class="sr-only">
+            <label class="payment-option" for="pay-wallet">Digital Wallet</label>
+
+            <!-- CSS-only panels shown when bank/wallet selected -->
+            <div class="payment-panels">
+                <div class="payment-panel bank-panel">
+                  <p style="margin:0;color:#666;font-size:14px">Please proceed with your bank transfer. Our team will verify your payment and confirm your order.</p>
+                </div>
+
+                <div class="payment-panel wallet-panel">
+                  <p style="margin:0;color:#666;font-size:14px">Please proceed with your digital wallet payment. Your order will be confirmed once payment is received.</p>
+                </div>
+              </div>
+          </div>
+
+          <!-- Order Review -->
+          <div class="form-section">
+            <h3>Order Review</h3>
+            <div id="order-review" class="order-review">
+              <div style="text-align:center;color:#999">Loading order details...</div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-place-order">Place Order</button>
+        </div>
+
+        <!-- Summary -->
+        <div class="checkout-summary">
+          <div class="summary-box">
+            <h3>Order Summary</h3>
+            <div id="summary-items"></div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-section">
+        <img src="assets/logo.jpg" alt="Logo" class="footer-logo">
+        <p>Founded with a simple mission—to bring the best products at the best prices right to your doorstep—we work every day to create a smooth, secure, and enjoyable shopping experience.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="service.html">Services</a></li>
+          <li><a href="aboutus.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function renderOrderReview() {
+      if (cart.length === 0) {
+        document.getElementById('order-review').innerHTML = '<p style="color:#d32f2f">Your cart is empty.</p>';
+        return;
+      }
+
+      let reviewHTML = '';
+      let subtotal = 0;
+
+      cart.forEach(item => {
+          const itemTotal = item.price * item.qty;
+          subtotal += itemTotal;
+          const thumb = item.img ? `<img src="${item.img}" alt="${item.title}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;margin-right:8px">` : '';
+          reviewHTML += `
+            <div class="review-item">
+              <span>${thumb}${item.title} x${item.qty}</span>
+              <span>Rs. ${itemTotal.toLocaleString()}</span>
+            </div>
+          `;
+      });
+
+      reviewHTML += `
+        <div class="review-total">
+          <span>Total</span>
+          <span>Rs. ${subtotal.toLocaleString()}</span>
+        </div>
+      `;
+
+      document.getElementById('order-review').innerHTML = reviewHTML;
+    }
+
+    function renderSummary() {
+      if (cart.length === 0) return;
+
+      let summaryHTML = '';
+      let subtotal = 0;
+
+      cart.forEach(item => {
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+        const thumb = item.img ? `<img src="${item.img}" alt="${item.title}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;margin-right:8px">` : '';
+        summaryHTML += `
+          <div class="review-item">
+            <span>${thumb}${item.title} x${item.qty}</span>
+            <span>Rs. ${itemTotal.toLocaleString()}</span>
+          </div>
+        `;
+      });
+
+      summaryHTML += `
+        <div class="review-total">
+          <span>Total</span>
+          <span>Rs. ${subtotal.toLocaleString()}</span>
+        </div>
+      `;
+
+      document.getElementById('summary-items').innerHTML = summaryHTML;
+    }
+
+    function handleCheckout(e) {
+      e.preventDefault();
+
+      const formData = new FormData(document.getElementById('checkout-form'));
+      const orderData = {
+        fullname: formData.get('fullname'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        address1: formData.get('address1'),
+        address2: formData.get('address2'),
+        city: formData.get('city'),
+        postal: formData.get('postal'),
+        payment: formData.get('payment'),
+        items: cart,
+        timestamp: new Date().toLocaleString()
+      };
+
+      // Store order in localStorage (demo)
+      let orders = JSON.parse(localStorage.getItem('orders')) || [];
+      orders.push(orderData);
+      localStorage.setItem('orders', JSON.stringify(orders));
+
+      // Clear cart
+      localStorage.removeItem('cart');
+
+      alert('Order placed successfully!\n\nOrder ID: ' + (orders.length) + '\nThank you for your purchase.');
+      window.location = 'index.html';
+    }
+
+    renderOrderReview();
+    renderSummary();
+  </script>
+</body>
+</html>

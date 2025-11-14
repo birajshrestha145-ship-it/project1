@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Product Redirect</title>
+  <meta http-equiv="refresh" content="0;url=products.html">
+</head>
+<body>
+  <script>
+    // If an id param is present, redirect to products.html?id=...
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (id) {
+      window.location.href = `products.html?id=${id}`;
+    } else {
+      window.location.href = 'products.html';
+    }
+  </script>
+  <p>Redirecting to product page...</p>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>A_ZERO</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script>
+    function handleSearch(event) {
+      event.preventDefault();
+      const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
+      const category = (document.getElementById('top-cat-select') && document.getElementById('top-cat-select').value) || 'all';
+      
+      if (searchTerm === '') {
+        alert('Please enter a search term');
+        return false;
+      }
+      
+      const productCards = document.querySelectorAll('.product-card');
+      let foundProducts = [];
+      let notFoundMessage = document.getElementById('not-found-message');
+      
+      // Remove previous not found message
+      if (notFoundMessage) {
+        notFoundMessage.remove();
+      }
+      
+      // Filter products based on search term
+      productCards.forEach(card => {
+        const title = card.querySelector('.title').textContent.toLowerCase();
+        if (title.includes(searchTerm)) {
+          card.style.display = 'block';
+          foundProducts.push(title);
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      
+      // If no products found, show not available message
+      if (foundProducts.length === 0) {
+        const notAvailableDiv = document.createElement('div');
+        notAvailableDiv.id = 'not-found-message';
+        notAvailableDiv.style.cssText = 'padding: 40px; text-align: center; font-size: 18px; color: #fff; background-color: rgba(0,0,0,0.3); border-radius: 6px; margin-top: 20px;';
+        notAvailableDiv.textContent = `"${searchTerm}" - Not Available`;
+        document.querySelector('.product-grid').parentElement.appendChild(notAvailableDiv);
+      }
+      
+      return false;
+    }
+    
+    function resetSearch() {
+      const productCards = document.querySelectorAll('.product-card');
+      productCards.forEach(card => {
+        card.style.display = 'block';
+      });
+      const notFoundMessage = document.getElementById('not-found-message');
+      if (notFoundMessage) {
+        notFoundMessage.remove();
+      }
+      document.getElementById('search-input').value = '';
+    }
+    
+    // Reset search when input is cleared
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('search-input');
+      searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' || (searchInput.value === '' && e.key !== 'Enter')) {
+          resetSearch();
+        }
+      });
+    });
+  </script>
+  <!-- Top utility bar removed -->
+
+
+  <!-- Header with logo, search, account icons -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo-area">
+        <a href="index.html"><img src="assets/logo.jpg" alt="Logo" class="logo"></a>
+      </div>
+
+      <!-- Small category selector beside logo -->
+      <div class="header-category">
+        <select id="top-cat-select" class="cat-select">
+          <option value="all">All</option>
+          <option value="electronics">Electronics</option>
+          <option value="fashion">Fashion</option>
+          <option value="cosmetics">Cosmetics</option>
+        </select>
+      </div>
+
+      <div class="search-area">
+        <form class="search-form" action="#" method="get" onsubmit="return handleSearch(event)">
+          <input class="search-input" type="text" id="search-input" placeholder="Search for products, brands and more" />
+          <button class="search-btn" type="submit">Search</button>
+        </form>
+      </div>
+
+      <div class="actions-area">
+        <a href="cart.html" class="action cart-link">Cart</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- CSS-only mini-cart (checkbox toggle) -->
+  <input type="checkbox" id="cart-toggle" class="cart-toggle-input" />
+  <div class="mini-cart-overlay" onclick="document.getElementById('cart-toggle').checked = false;"></div>
+  <div class="mini-cart">
+    <div class="mini-cart-header">
+      <h3>Shopping Cart</h3>
+      <label class="mini-cart-close" for="cart-toggle">×</label>
+    </div>
+    <div class="mini-cart-body">
+      <p style="color:#999">Cart is displayed on checkout page.</p>
+    </div>
+    <div class="mini-cart-footer">
+      <a href="checkout-1.html" class="btn">Go to Checkout</a>
+    </div>
+  </div>
+
+  <div class="container main-row">
+      <section class="product-section">
+        <h3>Featured Products</h3>
+        <div id="all-products-grid" class="product-grid"></div>
+      </section>
+
+        <script>
+          // Category filter: show/hide product cards based on the top select
+          (function(){
+            const select = document.getElementById('top-cat-select');
+            if (!select) return;
+            function applyCategory() {
+              const cat = select.value || 'all';
+              const cards = document.querySelectorAll('.product-card');
+              cards.forEach(card => {
+                const itemCat = card.getAttribute('data-category') || 'all';
+                if (cat === 'all' || itemCat === cat) {
+                  card.style.display = '';
+                } else {
+                  card.style.display = 'none';
+                }
+              });
+            }
+            select.addEventListener('change', applyCategory);
+            document.addEventListener('DOMContentLoaded', applyCategory);
+          })();
+        </script>
+
+        <script>
+          // Render all products into the homepage grid
+          (function(){
+            const allProductsData = {
+                  '1': {id:1, title: 'Sunday Running Club Oversized Hoodie', price:2500, img:'assets/hoodie.jpg', desc: 'Comfortable oversized hoodie, Sunday Running Club branded.', category: 'fashion'},
+      '2': {id:2, title: 'Premium Cotton Linen Casual Formal Pants for Men in Nepal', price:6000, img:'assets/pant.jpg', desc: 'Premium cotton-linen blend trousers for smart casual and formal wear.', category: 'fashion'},
+      '3': {id:3, title: 'Wireless Controller for PlayStation 4 & PC (Black)', price:2100, img:'assets/controller.jpg', desc: 'High-response wireless controller compatible with PS4 and PC.', category: 'electronics'},
+      '4': {id:4, title: 'Vr box With Adjustable Cardboard For 4-6 Inches Smartphones', price:3000, img:'assets/VR.jpg', desc: 'Adjustable VR box for 4-6 inch smartphones.', category: 'electronics'},
+      '5': {id:5, title: 'MARS Lip Mist for Women', price:1000, img:'assets/Lipstick.jpg', desc: 'Dual function lip mist with buildable, glossy, long-lasting color.', category: 'cosmetics'},
+      '6': {id:6, title: 'VESTEL 32" Normal LED TV | 3 Years Warranty', price:25000, img:'assets/Desktop.jpg', desc: '32 inch LED TV with IPS panel, HDR and Dolby sound.', category: 'electronics'},
+      '101': {id:101, title: 'Black Streetwear Half Pant', price:1200, img:'assets/Halfpant.jpg', desc: 'Stylish half pants perfect for summer.', category: 'fashion'},
+      '102': {id:102, title: 'Sky Blue Comfort Hoodie', price:2500, img:'assets/Hoodie1.jpg', desc: 'Premium quality hoodie with comfortable fit.', category: 'fashion'},
+      '103': {id:103, title: 'Classic Black Hoodie', price:2700, img:'assets/Hoodie2.jpg', desc: 'Stylish hoodie with modern design.', category: 'fashion'},
+      '104': {id:104, title: 'Cream Beige Urban Hoodie', price:2900, img:'assets/Hoodie3.jpg', desc: 'Premium comfort hoodie with excellent fabric.', category: 'fashion'},
+      '105': {id:105, title: 'Black Oversize Sweatshirt', price:2200, img:'assets/Sweatshirt.jpg', desc: 'Casual sweatshirt perfect for everyday wear.', category: 'fashion'},
+      '106': {id:106, title: 'Pure White Essential Pant', price:1500, img:'assets/Pant1.jpg', desc: 'Comfortable casual pants with modern cut.', category: 'fashion'},
+      '201': {id:201, title: 'Mypower Fast charging Powerbank | 20000mah Powerbank | Pd Fast Charging Power bank | Digital Display Powerbank | M205 PD QC 3.0 Power Bank', price:1800, img:'assets/Powerbank.jpg', desc: 'High capacity power bank with fast charging.', category: 'electronics'},
+      '202': {id:202, title: '25W I-phone Charger USB-C To Lightening Cable+Power Adapter For X-14 pro max', price:800, img:'assets/Charger.jpg', desc: 'Universal charger compatible with all devices.', category: 'electronics'},
+      '203': {id:203, title: 'Playstation DualSense Wireless Controller For PS5', price:10000, img:'assets/Controller1.jpg', desc: 'Wireless gaming controller with long battery life.', category: 'electronics'},
+      '204': {id:204, title: 'Vintage T9 Rechargeable Electric Hair Trimmer plastic body for men', price:2500, img:'assets/Trimmer.jpg', desc: 'Professional trimmer with precision blades.', category: 'electronics'},
+      '301': {id:301, title: 'MARS Candylicious Sheer Lip Gloss for Women | Hydrating & High Shine | Lightweight | Non-Sticky | Enriched with Vitamin-E, Hyaluronic Acid & Avocado Ester (4.0ml)', price:850, img:'assets/Lipstick1.jpg', desc: 'Long-lasting lipstick with vibrant colors.', category: 'cosmetics'},
+      '302': {id:302, title: 'Technic Invite Only Pressed Pigment Eyeshadow Palette', price:950, img:'assets/highlightercosmetics.jpg', desc: 'Premium highlighter and cosmetics in one.', category: 'cosmetics'}
+    };
+
+            const grid = document.getElementById('all-products-grid');
+            if (!grid) return;
+            const products = Object.values(allProductsData);
+            products.forEach(p => {
+              const a = document.createElement('a');
+              a.className = 'product-card';
+              a.href = `products.html?id=${p.id}`;
+              a.setAttribute('data-category', p.category || 'all');
+              a.innerHTML = `
+                <div class="product-image"><img src="${p.img}" alt="${p.title}"></div>
+                <div class="product-info">
+                  <h4 class="title">${p.title}</h4>
+                  <div class="price">Rs. ${p.price.toLocaleString()}</div>
+                </div>
+              `;
+              grid.appendChild(a);
+            });
+
+            // Ensure category filter applies to these new cards as well
+            const topSelect = document.getElementById('top-cat-select');
+            if (topSelect) topSelect.dispatchEvent(new Event('change'));
+          })();
+        </script>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-section">
+        <img src="assets/logo.jpg" alt="Logo" class="footer-logo">
+        <p>Founded with a simple mission—to bring the best products at the best prices right to your doorstep—we work every day to create a smooth, secure, and enjoyable shopping experience.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="service.html">Services</a></li>
+          <li><a href="aboutus.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

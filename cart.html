@@ -15,14 +15,14 @@
     .cart-item { background: #fff; border: 1px solid #eee; padding: 16px; margin-bottom: 12px; border-radius: 6px; display: flex; gap: 16px; }
     .item-img { width: 100px; height: 100px; background: #f4f4f4; border-radius: 4px; flex-shrink: 0; }
     .item-details { flex: 1; display: flex; flex-direction: column; }
-    .item-title { font-weight: 600; margin: 0; }
+    .item-title { font-weight: 600; margin: 0; color: #000; }
     .item-price { color: var(--accent); font-weight: 700; font-size: 18px; margin: 4px 0; }
     .item-qty { display: flex; gap: 8px; align-items: center; margin-top: auto; }
     .qty-input { width: 60px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; }
     .remove-btn { color: #d32f2f; text-decoration: none; font-size: 14px; cursor: pointer; }
     .summary-box { width: 300px; background: #f9f9f9; padding: 16px; border-radius: 6px; border: 1px solid #eee; height: fit-content; }
-    .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
-    .summary-total { display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; margin-top: 12px; padding-top: 12px; border-top: 2px solid #ddd; }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #000; }
+    .summary-total { display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; margin-top: 12px; padding-top: 12px; border-top: 2px solid #ddd; color: #000; }
     .btn-proceed { display: block; width: 100%; background: var(--accent); color: #fff; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 12px; text-align: center; text-decoration: none; }
     .btn-continue { display: inline-block; color: var(--accent); text-decoration: none; margin-top: 12px; }
     .empty-cart { text-align: center; padding: 40px 20px; color: #fff; }
@@ -52,7 +52,7 @@
         </form>
       </div>
       <div class="actions-area">
-        <label class="action cart-toggle-label" for="cart-toggle">Cart</label>
+        <a href="cart.html" class="action">Cart</a>
       </div>
     </div>
   </header>
@@ -88,9 +88,7 @@
           <span>Total:</span>
           <span id="total">Rs. 0</span>
         </div>
-        <form action="checkout.html" method="GET" style="margin:0">
-          <button type="submit" class="btn-proceed">Proceed to Checkout</button>
-        </form>
+        <a href="checkout.html" class="btn-proceed">Proceed to Checkout</a>
         <a href="index.html" class="btn-continue">← Continue Shopping</a>
       </div>
     </div>
@@ -171,7 +169,6 @@
       document.getElementById('cart-items').innerHTML = cartHTML;
       document.getElementById('subtotal').textContent = 'Rs. ' + subtotal.toLocaleString();
       document.getElementById('total').textContent = 'Rs. ' + subtotal.toLocaleString();
-      document.getElementById('cart-data').value = JSON.stringify(cart);
     }
 
     function updateQty(id, qty) {
